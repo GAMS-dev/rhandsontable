@@ -23,7 +23,7 @@ Authors@R: c(
   person("Splunk Inc", role = c("ctb", "cph"), comment = "Sparkline.js library"),
   person("Russell", "Kent", role = c("ctb", "cph"), comment = "Sparkline.js library"),
   person("Rohan", "Jon", role = c("ctb", "cph"), comment = "ZeroClipboard library"),
-  person("Greene", "James", role = c("ctb", "cph"), comment = "ZeroClipboard library")),
+  person("Greene", "James", role = c("ctb", "cph"), comment = "ZeroClipboard library"),
   person("Frederik", "Proske", role = c("ctb")))
 Maintainer: Jonathan Owen <jonathanro@gmail.com>
 Description: An R interface to the 'Handsontable' JavaScript library, which is a

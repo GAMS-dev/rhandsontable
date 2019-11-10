@@ -187,11 +187,11 @@ HTMLWidgets.widget({
             console.log("afterSetCellMeta: Shiny.onInputChange: " + this.rootElement.id);
           }
         }
-        Shiny.onInputChange(this.rootElement.id + "_comment", {
-          data: this.getData(),
-          comment: { r: r + 1, c: c + 1, key: key, val: val},
-          params: this.params
-        });
+        //Shiny.onInputChange(this.rootElement.id + "_comment", {
+        //  data: this.getData(),
+        //  comment: { r: r + 1, c: c + 1, key: key, val: val},
+        //  params: this.params
+        //});
       }
 
     };
@@ -218,16 +218,16 @@ HTMLWidgets.widget({
             console.log("afterSelectionEnd: Shiny.onInputChange: " + this.rootElement.id);
           }
         }
-        Shiny.onInputChange(this.rootElement.id + "_select:rhandsontable.customSelectDeserializer", {
-          data: this.getData(),
-          select: { r: r + 1,
-                    c: c + 1,
-                    r2: r2 + 1,
-                    c2: c2 + 1,
-                    rAll: r_all,
-                    cAll: c_all },
-          params: this.params
-        });
+        //Shiny.onInputChange(this.rootElement.id + "_select:rhandsontable.customSelectDeserializer", {
+        //  data: this.getData(),
+        //  select: { r: r + 1,
+        //            c: c + 1,
+        //            r2: r2 + 1,
+        //            c2: c2 + 1,
+        //            rAll: r_all,
+        //            cAll: c_all },
+        //  params: this.params
+        //});
       }
 
     };

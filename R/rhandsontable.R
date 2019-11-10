@@ -434,8 +434,6 @@ hot_col = function(hot, col, type = NULL, format = NULL, source = NULL,
   cols = hot$x$columns
   if (is.null(cols)) {
     # create a columns list
-    warning("rhandsontable column types were previously not defined but are ",
-            "now being set to 'text' to support column properties")
     cols = lapply(hot$x$colHeaders, function(x) {
       list(type = "text")
     })

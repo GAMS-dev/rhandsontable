@@ -273,6 +273,25 @@ HTMLWidgets.widget({
         });
     };
 
+    x.beforeCreateCol = function(ind, ct) {
+     const currentHeaders = this.getColHeader();
+     let newHdr = prompt('Enter name for the new column');
+     if ( newHdr == null ) {
+       return false;
+     }
+     let i = 1;
+     while ( currentHeaders.find(el => el === newHdr) ) {
+      newHdr += i;
+      i++;
+     }
+     currentHeaders.splice(ind, 0, newHdr);
+     setTimeout(() => {
+        this.updateSettings({
+           colHeaders: currentHeaders
+        });
+     }, 90);
+    }
+
     x.afterCreateCol = function(ind, ct) {
 
       if (HTMLWidgets.shinyMode)
@@ -281,11 +300,14 @@ HTMLWidgets.widget({
             console.log("afterCreateCol: Shiny.onInputChange: " + this.rootElement.id);
           }
         }
-        Shiny.onInputChange(this.rootElement.id, {
-          data: this.getData(),
-          changes: { event: "afterCreateCol", ind: ind, ct: ct },
-          params: this.params
-        });
+        setTimeout(() => {
+          this.params.colHeaders = this.getColHeader();
+          Shiny.onInputChange(this.rootElement.id, {
+            data: this.getData(),
+            changes: { event: "afterCreateCol", ind: ind, ct: ct },
+            params: this.params
+          });
+        }, 100);
     };
 
     x.afterRemoveCol = function(ind, ct) {
@@ -296,11 +318,14 @@ HTMLWidgets.widget({
             console.log("afterRemoveCol: Shiny.onInputChange: " + this.rootElement.id);
           }
         }
-        Shiny.onInputChange(this.rootElement.id, {
-          data: this.getData(),
-          changes: { event: "afterRemoveCol", ind: ind, ct: ct },
-          params: this.params
-        });
+        setTimeout(() => {
+            this.params.colHeaders = this.getColHeader();
+            Shiny.onInputChange(this.rootElement.id, {
+              data: this.getData(),
+              changes: { event: "afterRemoveCol", ind: ind, ct: ct },
+              params: this.params
+            });
+        }, 100);
     };
 
   },

@@ -38,7 +38,7 @@ rhandsontable <- function(data, colHeaders, rowHeaders, comments = NULL,
                           useTypes = TRUE, readOnly = NULL,
                           selectCallback = FALSE,
                           width = NULL, height = NULL, digits = 4,
-                          debug = NULL, search = FALSE, ...) {
+                          debug = NULL, search = FALSE, naAsNull = FALSE, ...) {
   rColHeaders = colnames(data)
   if (.row_names_info(data) > 0L)
     rRowHeaders = rownames(data)
@@ -115,7 +115,7 @@ rhandsontable <- function(data, colHeaders, rowHeaders, comments = NULL,
 
   x = list(
     data = jsonlite::toJSON(data, na = "string", rownames = FALSE,
-                            digits = digits),
+                            digits = digits, na_as_null = naAsNull),
     rClass = rClass,
     rColClasses = rColClasses,
     rColnames = as.list(colnames(data)),

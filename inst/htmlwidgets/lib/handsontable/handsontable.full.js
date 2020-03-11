@@ -50491,8 +50491,10 @@ function numericValidator(value, callback) {
   if (valueToValidate === null || valueToValidate === void 0) {
     valueToValidate = '';
   }
-
-  if (this.allowEmpty && valueToValidate === '') {
+  
+  if (valueToValidate === "NA" || valueToValidate === "Inf" || valueToValidate === "-Inf") {
+    callback(true);
+  } else if (this.allowEmpty && valueToValidate === '') {
     callback(true);
   } else if (valueToValidate === '') {
     callback(false);

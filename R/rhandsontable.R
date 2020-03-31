@@ -602,7 +602,7 @@ hot_validate_numeric = function(hot, cols, min = NULL, max = NULL,
           } else if (value === '') {
             return callback(false);
           }
-          let isNumber = /^-?\\d*(\\.|,)?\\d*$/.test(value);
+          var isNumber = /^-?\\d*(\\.|,)?\\d*$/.test(value);
           if (!isNumber) {
             return callback(false);
           }

@@ -266,18 +266,20 @@ HTMLWidgets.widget({
     };
 
     x.beforeCreateCol = function(ind, ct) {
-     const currentHeaders = this.getColHeader();
-     let newHdr = prompt('Enter name for the new column');
+     var currentHeaders = this.getColHeader();
+     var newHdr = prompt('Enter name for the new column');
      if ( newHdr == null ) {
        return false;
      }
-     let i = 1;
-     while ( currentHeaders.find(el => el === newHdr) ) {
+     var i = 1;
+     while ( currentHeaders.find(function (el) {
+       el === newHdr
+     })) {
       newHdr += i;
       i++;
      }
      currentHeaders.splice(ind, 0, newHdr);
-     setTimeout(() => {
+     setTimeout(function () {
         this.updateSettings({
            colHeaders: currentHeaders
         });
@@ -292,7 +294,7 @@ HTMLWidgets.widget({
             console.log("afterCreateCol: Shiny.onInputChange: " + this.rootElement.id);
           }
         }
-        setTimeout(() => {
+        setTimeout(function () {
           this.params.colHeaders = this.getColHeader();
           Shiny.onInputChange(this.rootElement.id, {
             data: this.getData(),
@@ -310,7 +312,7 @@ HTMLWidgets.widget({
             console.log("afterRemoveCol: Shiny.onInputChange: " + this.rootElement.id);
           }
         }
-        setTimeout(() => {
+        setTimeout(function () {
             this.params.colHeaders = this.getColHeader();
             Shiny.onInputChange(this.rootElement.id, {
               data: this.getData(),

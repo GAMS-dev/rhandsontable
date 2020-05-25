@@ -72,7 +72,8 @@ HTMLWidgets.widget({
       var searchField = document.getElementById('searchField');
       if (typeof(searchField) != 'undefined' && searchField !== null) {
         Handsontable.dom.addEvent(searchField, 'keyup', function (event) {
-          var queryResult = instance.hot.search.query(this.value);
+          var search = instance.hot.getPlugin('search');
+          var queryResult = search.query(this.value);
           instance.hot.render();
         });
       }
@@ -252,7 +253,7 @@ HTMLWidgets.widget({
 
     x.afterRemoveRow = function(ind, ct) {
 
-      if (HTMLWidgets.shinyMode)
+      if (HTMLWidgets.shinyMode) {
         if (this.params && this.params.debug) {
           if (this.params.debug > 0) {
             console.log("afterRemoveRow: Shiny.onInputChange: " + this.rootElement.id);
@@ -263,6 +264,7 @@ HTMLWidgets.widget({
           changes: { event: "afterRemoveRow", ind: ind, ct: ct },
           params: this.params
         });
+      }
     };
 
     x.beforeCreateCol = function(ind, ct) {
@@ -288,7 +290,7 @@ HTMLWidgets.widget({
 
     x.afterCreateCol = function(ind, ct) {
 
-      if (HTMLWidgets.shinyMode)
+      if (HTMLWidgets.shinyMode) {
         if (this.params && this.params.debug) {
           if (this.params.debug > 0) {
             console.log("afterCreateCol: Shiny.onInputChange: " + this.rootElement.id);
@@ -302,6 +304,7 @@ HTMLWidgets.widget({
             params: this.params
           });
         }, 100);
+      }
     };
 
     x.afterRemoveCol = function(ind, ct) {
@@ -320,6 +323,21 @@ HTMLWidgets.widget({
               params: this.params
             });
         }, 100);
+    };
+
+    x.afterRowMove = function(ind, ct) {
+
+      if (HTMLWidgets.shinyMode)
+        if (this.params && this.params.debug) {
+          if (this.params.debug > 0) {
+            console.log("afterRowMove: Shiny.onInputChange: " + this.rootElement.id);
+          }
+        }
+        Shiny.onInputChange(this.rootElement.id, {
+          data: this.getData(),
+          changes: { event: "afterRowMove", ind: ind, ct: ct },
+          params: this.params
+        });
     };
 
   },
@@ -445,3 +463,38 @@ function safeHtmlRenderer(instance, td, row, col, prop, value, cellProperties) {
 
   return td;
 }
+
+
+// if the table is in an ineractive session, shiny mode,
+// then we register the handler for setting data interactively
+if (HTMLWidgets.shinyMode) {
+  Shiny.addCustomMessageHandler(
+    "handler_setDataAtCell",
+    function(message) {
+      var hot = window.HTMLWidgets.find('#' + message.id).hot;
+      var count = message.size;
+
+      // setDataAtCell is overloaded so there's different parameters to send one value
+      if( count == 1 ) {
+        hot.setDataAtCell(message.row, message.col, message.val);
+        return;
+      }
+      // if sending 2+ values to the table then we use an array of arrays
+      var datArr = [];
+      // when the table is sorted we need to send the values to their visual locations
+      if ( hot.getPlugin('columnSorting').isSorted() ) {
+        for ( var i=0; i < count; i++ ) {
+  	      datArr[datArr.length] = [hot.toVisualRow(message.row[i]),
+  	                               hot.toVisualColumn(message.col[i]),
+  	                               message.val[i]];
+        }
+      } else {
+        // when not sorted we just use the values from R
+        for ( var i=0; i < count; i++ ) {
+  	      datArr[datArr.length] = [message.row[i], message.col[i],  message.val[i]];
+        }
+      }
+      hot.setDataAtCell(datArr);
+    });
+}
+

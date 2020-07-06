@@ -17,6 +17,7 @@ rhandsontable(
   digits = 4,
   debug = NULL,
   search = FALSE,
+  naAsNull = FALSE,
   ...
 )
 }

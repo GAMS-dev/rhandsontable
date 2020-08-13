@@ -69,13 +69,57 @@ HTMLWidgets.widget({
       instance.hot.params = x;
       instance.hot.updateSettings(x);
 
-      var searchField = document.getElementById('searchField');
+      var searchField = document.getElementById(el.id + '-search');
       if (typeof(searchField) != 'undefined' && searchField !== null) {
-        Handsontable.dom.addEvent(searchField, 'keyup', function (event) {
-          var search = instance.hot.getPlugin('search');
-          var queryResult = search.query(this.value);
-          instance.hot.render();
+        var search = instance.hot.getPlugin('search');
+        var currentSearch = '';
+        var searchCount = 0;
+        var shiftPressed = false;
+        searchField.addEventListener('focus', function(event) {
+          shiftPressed = false;
         });
+        searchField.addEventListener('keydown', function(event) {
+          if (event.key === 'Shift')
+            shiftPressed = true;
+        });
+        Handsontable.dom.addEvent(searchField, 'keyup',
+          Handsontable.helper.debounce(function (event) {
+          console.log(event.key)
+          if (event.key === 'Shift') {
+            shiftPressed = false;
+          }
+          if (this.value === '') {
+            search.query('');
+            instance.hot.render();
+            return;
+          }
+          if (!this.value.startsWith(currentSearch)) {
+            searchCount = 0;
+          }
+          currentSearch = this.value;
+          var queryResult = search.query(currentSearch);
+          if (event.code === 'Enter') {
+            if (shiftPressed) {
+              if (searchCount > 0) {
+                searchCount--;
+              } else {
+                searchCount = queryResult.length - 1;
+              }
+            } else {
+              if (searchCount < queryResult.length - 1){
+                searchCount++;
+              } else {
+                searchCount = 0;
+              }
+            }
+          }
+          
+          if (queryResult.length > 0) {
+            instance.hot.scrollViewportTo(queryResult[searchCount].row,
+              queryResult[searchCount].col);
+          }
+          instance.hot.render();
+        }, 300));
       }
     }
   },

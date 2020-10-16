@@ -264,10 +264,7 @@ hot_context_menu = function(hot, allowRowEdit = TRUE, allowColEdit = TRUE,
             "are defined.  Set useTypes = FALSE in rhandsontable to enable column ",
             "edits.")
 
-  if (is.null(hot$x$contextMenu$items))
-    opts = list()
-  else
-    opts = hot$x$contextMenu$items
+  opts = list()
 
   add_opts = function(new, old, val = list()) {
     new_ = lapply(new, function(x) {
@@ -297,31 +294,29 @@ hot_context_menu = function(hot, allowRowEdit = TRUE, allowColEdit = TRUE,
   else
     opts =  remove_opts(c("hsep2", "col_left", "col_right", "remove_col"))
 
-  opts = add_opts(c("hsep3", "undo", "redo"), opts)
-
-  opts = add_opts(c("hsep4", "alignment"), opts)
-
-  if (!is.null(allowReadOnly) && allowReadOnly)
-    opts = add_opts(c("hsep5", "make_read_only"), opts)
-  else
-    opts =  remove_opts(c("hsep5", "make_read_only"))
-
-  if (!is.null(allowComments) && allowComments)
-    opts = add_opts(c("hsep6", "commentsAddEdit", "commentsRemove"), opts)
-  else
-    opts =  remove_opts(c("hsep6", "commentsAddEdit", "commentsRemove"))
-
-  if (!is.null(allowCustomBorders) && allowCustomBorders)
-    opts = add_opts(c("hsep7", "borders"), opts)
-  else
-    opts =  remove_opts(c("hsep7", "borders"))
-
-  sep_ct = 20
   if (!is.null(customOpts)) {
-    opts[[paste0("hsep", sep_ct)]] = list(name = "---------")
-    sep_ct = sep_ct + 1
+    opts[["hsep3"]] = list(name = "---------")
     opts = modifyList(opts, customOpts)
   }
+
+  opts = add_opts(c("hsep4", "undo", "redo"), opts)
+
+  opts = add_opts(c("hsep5", "alignment"), opts)
+
+  if (!is.null(allowReadOnly) && allowReadOnly)
+    opts = add_opts(c("hsep6", "make_read_only"), opts)
+  else
+    opts =  remove_opts(c("hsep6", "make_read_only"))
+
+  if (!is.null(allowComments) && allowComments)
+    opts = add_opts(c("hsep7", "commentsAddEdit", "commentsRemove"), opts)
+  else
+    opts =  remove_opts(c("hsep7", "commentsAddEdit", "commentsRemove"))
+
+  if (!is.null(allowCustomBorders) && allowCustomBorders)
+    opts = add_opts(c("hsep8", "borders"), opts)
+  else
+    opts =  remove_opts(c("hsep8", "borders"))
 
   if (grepl("^hsep", names(opts)[1]))
     opts = opts[-1]

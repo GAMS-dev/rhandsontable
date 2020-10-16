@@ -311,28 +311,6 @@ HTMLWidgets.widget({
       }
     };
 
-    x.beforeCreateCol = function(ind, ct) {
-     var currentHeaders = this.getColHeader();
-     var newHdr = prompt('Enter name for the new column');
-     if ( newHdr == null ) {
-       return false;
-     }
-     var i = 1;
-     while ( currentHeaders.find(function (el) {
-       el === newHdr
-     })) {
-      newHdr += i;
-      i++;
-     }
-     currentHeaders.splice(ind, 0, newHdr);
-     var that = this;
-     setTimeout(function () {
-        that.updateSettings({
-           colHeaders: currentHeaders
-        });
-     }, 90);
-    }
-
     x.afterCreateCol = function(ind, ct) {
 
       if (HTMLWidgets.shinyMode) {
@@ -341,15 +319,11 @@ HTMLWidgets.widget({
             console.log("afterCreateCol: Shiny.onInputChange: " + this.rootElement.id);
           }
         }
-        var that = this;
-        setTimeout(function () {
-          that.params.colHeaders = that.getColHeader();
-          Shiny.onInputChange(that.rootElement.id, {
-            data: that.getData(),
-            changes: { event: "afterCreateCol", ind: ind, ct: ct },
-            params: that.params
-          });
-        }, 100);
+        Shiny.onInputChange(this.rootElement.id, {
+          data: this.getData(),
+          changes: { event: "afterCreateCol", ind: ind, ct: ct },
+          params: this.params
+        });
       }
     };
 
@@ -361,15 +335,11 @@ HTMLWidgets.widget({
             console.log("afterRemoveCol: Shiny.onInputChange: " + this.rootElement.id);
           }
         }
-        var that = this;
-        setTimeout(function () {
-            that.params.colHeaders = that.getColHeader();
-            Shiny.onInputChange(that.rootElement.id, {
-              data: that.getData(),
-              changes: { event: "afterRemoveCol", ind: ind, ct: ct },
-              params: that.params
-            });
-        }, 100);
+        Shiny.onInputChange(this.rootElement.id, {
+          data: this.getData(),
+          changes: { event: "afterRemoveCol", ind: ind, ct: ct },
+          params: this.params
+        });
     };
 
     x.afterRowMove = function(ind, ct) {

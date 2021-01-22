@@ -84,7 +84,6 @@ HTMLWidgets.widget({
         });
         Handsontable.dom.addEvent(searchField, 'keyup',
           Handsontable.helper.debounce(function (event) {
-          console.log(event.key)
           if (event.key === 'Shift') {
             shiftPressed = false;
           }

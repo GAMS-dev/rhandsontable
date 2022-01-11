@@ -612,7 +612,7 @@ hot_validate_numeric = function(hot, cols, min = NULL, max = NULL,
 
   if (!is.null(exclude))
     ex_str = paste0("if ([",
-                    paste0(paste0("'", exclude, "'"), collapse = ","),
+                    paste0(exclude, collapse = ","),
                     "].indexOf(value) > -1) { return callback(false); }")
   else
     ex_str = ""
@@ -632,7 +632,7 @@ hot_validate_numeric = function(hot, cols, min = NULL, max = NULL,
 
   if (!is.null(choices))
     chcs_str = paste0("if ([",
-                      paste0(paste0("'", choices, "'"), collapse = ","),
+                      paste0(choices, collapse = ","),
                       "].indexOf(value) == -1) { return callback(false); }")
   else
     chcs_str = ""
